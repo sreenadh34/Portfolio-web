@@ -26,6 +26,23 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+body {
+  @apply h-screen  cursor-none;
+}
+
+.cursor-dot {
+  @apply w-1 h-1 bg-white
+}
+
+.cursor-outline {
+  @apply w-7 h-7 border-2 border-[hsla(303,68%,58%,1)]
+}
+
+.cursor-dot,
+.cursor-outline {
+    @apply fixed top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-10 pointer-events-none
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

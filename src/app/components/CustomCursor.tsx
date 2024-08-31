@@ -1,40 +1,60 @@
-"use client"
-import React from "react";
-import { useEffect } from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 
-const CustomCursor = () => {
+const CustomCursor: React.FC = () => {
+  const cursorDotRef = useRef<HTMLDivElement | null>(null);
+  const cursorOutlineRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    const cursorDot = document.querySelector("[data-cursor-dot]") as HTMLElement;
-    const cursorOutline = document.querySelector(".cursor-outline");
+    const cursorDot = cursorDotRef.current;
+    const cursorOutline = cursorOutlineRef.current;
 
     if (cursorDot && cursorOutline) {
+      let posX = 0;
+      let posY = 0;
+      let outlineX = 0;
+      let outlineY = 0;
+
+      // Adjust this factor to control the trailing speed
+      const trailingFactor = 0.1; // Lower value = faster follow, higher value = slower follow
+
       const handleMouseMove = (e: MouseEvent) => {
-        const posX = e.clientX;
-        const posY = e.clientY;
+        posX = e.clientX;
+        posY = e.clientY;
+      };
 
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
+      const animateCursor = () => {
+        outlineX += (posX - outlineX) * trailingFactor; // Smooth follow effect
+        outlineY += (posY - outlineY) * trailingFactor;
 
-        cursorOutline.animate({
-          left: `${posX}px`,
-          top:`${posY}px`
-        }, { duration: 500, fill: "forwards"});
+        if (cursorDot) {
+          cursorDot.style.left = `${posX}px`;
+          cursorDot.style.top = `${posY}px`;
+        }
+
+        if (cursorOutline) {
+          cursorOutline.style.left = `${outlineX}px`;
+          cursorOutline.style.top = `${outlineY}px`;
+        }
+
+        requestAnimationFrame(animateCursor); // Continue the animation loop
       };
 
       window.addEventListener("mousemove", handleMouseMove);
+      requestAnimationFrame(animateCursor);
 
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
       };
     }
   }, []);
-     
+
   return (
     <>
-    <div data-cursor-dot className="cursor-dot"></div>
-    <div className="cursor-outline"></div>
+      <div data-cursor-dot ref={cursorDotRef} className="cursor-dot"></div>
+      <div ref={cursorOutlineRef} className="cursor-outline"></div>
     </>
-  )
+  );
 };
 
 export default CustomCursor;

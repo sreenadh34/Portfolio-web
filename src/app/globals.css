@@ -27,21 +27,26 @@ body {
 }
 
 body {
-  @apply h-screen  cursor-none;
+  @apply h-screen cursor-none;
 }
 
 .cursor-dot {
-  @apply w-1 h-1 bg-white
+  @apply w-2 h-2 bg-cyan-400;
 }
 
 .cursor-outline {
-  @apply w-7 h-7 border-2 border-[hsla(303,68%,58%,1)]
+  @apply w-10 h-10 border-2 border-[#952cf1];
+  transition: left 0.2s ease-out, top 0.2s ease-out; /* Smooth follow effect */
 }
 
 .cursor-dot,
 .cursor-outline {
-    @apply fixed top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-10 pointer-events-none
+  @apply fixed top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-10 pointer-events-none;
 }
+
+
+
+
 
 @layer utilities {
   .text-balance {
